@@ -1,15 +1,10 @@
 package Servidor;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Modelo extends Thread{
+public class Modelo extends Thread {
     protected Controlador controlador;
     final int PUERTO = 60002;
     protected ServerSocket socket;
@@ -20,12 +15,13 @@ public class Modelo extends Thread{
     protected OutputStream os;
     protected OutputStreamWriter osw;
     protected BufferedWriter bw;
+    protected String FILES_FOLDER = "files/";
 
-    public void setControlador(Controlador c){
+    public void setControlador(Controlador c) {
         this.controlador = c;
     }
 
-    public void abrirPuerto(){
+    public void abrirPuerto() {
         try {
             socket = new ServerSocket(PUERTO);
         } catch (IOException e) {
@@ -33,7 +29,7 @@ public class Modelo extends Thread{
         }
     }
 
-    public void esperar(){
+    public void esperar() {
         try {
             socket_cli = socket.accept();
         } catch (IOException e) {
@@ -41,7 +37,7 @@ public class Modelo extends Thread{
         }
     }
 
-    public void crearFlujos(){
+    public void crearFlujos() {
         try {
             in = socket_cli.getInputStream();
             isr = new InputStreamReader(in);
@@ -54,17 +50,17 @@ public class Modelo extends Thread{
         }
     }
 
-    public void enviarMensaje(String mensaje){
-       try {
+    public void enviarMensaje(String mensaje) {
+        try {
             bw.write(mensaje);
             bw.newLine();
             bw.flush();
         } catch (IOException e) {
             e.printStackTrace();
-        } 
+        }
     }
 
-    public String recibirMensaje(){
+    public String recibirMensaje() {
         try {
             String mensaje = br.readLine();
             return mensaje;
@@ -74,10 +70,27 @@ public class Modelo extends Thread{
         return "";
     }
 
-    public void run(){
-       while(true){
+    public void recibirArchivo(File archivo) {
+        try {
+            String nombreArchivo = br.readLine();
+            File destino = new File(FILES_FOLDER + nombreArchivo);
+            FileOutputStream fos = new FileOutputStream(destino);
+            byte[] buffer = new byte[8192];
+            int count;
+            while ((count = in.read(buffer)) > 0) {
+                fos.write(buffer, 0, count);
+            }
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+
+    public void run() {
+        while (true) {
             String mensaje = recibirMensaje();
             controlador.agregarMensaje(mensaje);
-       } 
+        }
     }
 }
