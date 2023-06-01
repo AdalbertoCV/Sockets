@@ -1,8 +1,12 @@
+// Autores: Adalberto Cerrillo Vázquez, Elliot Axel Noriega
+// Version: 1.0
+
 package Cliente;
 
 import java.io.*;
 import java.net.Socket;
 
+// hilo para la comunicacion cliente/servidor
 public class Modelo extends Thread {
     protected Controlador controlador;
     final int PUERTO = 60002;
@@ -15,10 +19,12 @@ public class Modelo extends Thread {
     protected BufferedWriter bw;
     final String HOST = "localhost";
 
+    // Se asigna el controlador a nuestro modelo
     public void setControlador(Controlador c) {
         this.controlador = c;
     }
 
+    // el cliente se conecta al servidor mediante el socket
     public void conectar() {
         try {
             socket_cli = new Socket(HOST, PUERTO);
@@ -27,6 +33,7 @@ public class Modelo extends Thread {
         }
     }
 
+    // se crean los flujos de intercambio de mensajes entrada/salida
     public void crearFlujos() {
         try {
             in = socket_cli.getInputStream();
@@ -40,6 +47,7 @@ public class Modelo extends Thread {
         }
     }
 
+    // metodo para enviar mensaje al servidor
     public void enviarMensaje(String mensaje) {
         try {
             bw.write(mensaje);
@@ -50,6 +58,7 @@ public class Modelo extends Thread {
         }
     }
 
+    // metodo para recibir un mensaje del servidor
     public String recibirMensaje() {
         try {
             String mensaje = br.readLine();
@@ -60,6 +69,7 @@ public class Modelo extends Thread {
         return "";
     }
 
+    // metodo para enviar un archivo en un arreglo de bytes al servidor
     public void enviarArchivo(File archivo) {
         try {
             FileInputStream fis = new FileInputStream(archivo);
@@ -79,6 +89,7 @@ public class Modelo extends Thread {
     }
     
 
+    // ciclo infinito para mantener abierta la comunicacion hasta que se cierren las ventanas.
     public void run() {
         while (true) {
             String mensaje = recibirMensaje();

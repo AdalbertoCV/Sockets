@@ -1,3 +1,6 @@
+// Autores: Adalberto Cerrillo Vázquez, Elliot Axel Noriega
+// Version: 1.0
+
 package Servidor;
 public class Servidor {
     public static void main(String[] args){

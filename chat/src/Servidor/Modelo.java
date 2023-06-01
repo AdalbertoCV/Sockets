@@ -1,9 +1,13 @@
+// Autores: Adalberto Cerrillo Vázquez, Elliot Axel Noriega
+// Version: 1.0
+
 package Servidor;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+// hilo para la comunicacion cliente/servidor
 public class Modelo extends Thread {
     protected Controlador controlador;
     final int PUERTO = 60002;
@@ -17,10 +21,12 @@ public class Modelo extends Thread {
     protected BufferedWriter bw;
     protected String FILES_FOLDER = "files/";
 
+    // se asigna el controlador correspondiente
     public void setControlador(Controlador c) {
         this.controlador = c;
     }
 
+    // se abren los puertos y se crea el socket
     public void abrirPuerto() {
         try {
             socket = new ServerSocket(PUERTO);
@@ -29,6 +35,7 @@ public class Modelo extends Thread {
         }
     }
 
+    // se aceptan mensajes del cliente
     public void esperar() {
         try {
             socket_cli = socket.accept();
@@ -37,6 +44,7 @@ public class Modelo extends Thread {
         }
     }
 
+    // se crean los flujos para la comunicacion entrada/salida
     public void crearFlujos() {
         try {
             in = socket_cli.getInputStream();
@@ -50,6 +58,7 @@ public class Modelo extends Thread {
         }
     }
 
+    // metodo para enviar un mensaje al cliente
     public void enviarMensaje(String mensaje) {
         try {
             bw.write(mensaje);
@@ -60,6 +69,7 @@ public class Modelo extends Thread {
         }
     }
 
+    // metodo para recibir un mensaje del cliente
     public String recibirMensaje() {
         try {
             String mensaje = br.readLine();
@@ -70,6 +80,7 @@ public class Modelo extends Thread {
         return "";
     }
 
+    // se recibe un archivo como arreglo de bytes
     public void recibirArchivo(File archivo) {
         try {
             String nombreArchivo = br.readLine();
@@ -87,6 +98,7 @@ public class Modelo extends Thread {
     }
     
 
+    // ciclo infinito para mantener la conexion abierta hasta que se cierren las ventanas.
     public void run() {
         while (true) {
             String mensaje = recibirMensaje();

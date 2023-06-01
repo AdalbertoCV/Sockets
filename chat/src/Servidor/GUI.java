@@ -1,3 +1,6 @@
+// Autores: Adalberto Cerrillo Vázquez, Elliot Axel Noriega
+// Version: 1.0
+
 package Servidor;
 
 import javax.swing.JTextArea;
@@ -13,6 +16,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
 public class GUI extends JFrame {
+    // componentes necesarios para la interfaz
     protected JTextArea pantalla;
     protected JLabel lblmsj;
     protected JTextField fldmsj;
@@ -29,6 +33,7 @@ public class GUI extends JFrame {
         inicializarComponentes();
     }
 
+    // se inicializan los componentes de la interfaz y se dan layouts y tamaños
     private void inicializarComponentes() {
         this.setSize(400, 400);
         this.setResizable(false);
@@ -55,27 +60,33 @@ public class GUI extends JFrame {
         this.add(botones, BorderLayout.SOUTH);
     }
 
+    // se agrega un mensaje a la pantalla
     public void agregarMensaje(String mensaje) {
         pantalla.append(mensaje + "\n");
     }
 
+    // se limpia la entrada luego del envio de un mensaje
     public void limpiarEntrada() {
         fldmsj.setText("");
     }
 
+    // se asigna el controlador correspondiente
     public void setControlador(Controlador c) {
         this.controlador = c;
     }
 
+    // mostramos nuestra ventana
     public void mostrar() {
         this.setVisible(true);
     }
 
+    // inicializamos la funcionalidad de los botones
     public void inicializar() {
         enviar.setActionCommand(COMANDO);
         enviar.addActionListener(controlador);
     }
 
+    // obtenemos el mensaje del txtfld
     public String getMensaje() {
         return fldmsj.getText();
     }
