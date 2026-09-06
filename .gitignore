@@ -1,0 +1,17 @@
+# Compilados de Java
+*.class
+bin/
+out/
+build/
+
+# Archivos recibidos por el chat
+chat/files/
+
+# Editores
+.vscode/
+.idea/
+*.iml
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
